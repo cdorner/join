@@ -1,0 +1,134 @@
+<ion-view view-title="Join">
+
+    <ion-nav-buttons side="left">
+        <i ng-click="showConfigurations();" class="icon ion-ios-gear-outline" style="font-size:34px;"></i>
+    </ion-nav-buttons>
+
+    <ion-nav-buttons side="right">
+        <a class="icon ion-ios-game-controller-b-outline" ui-sref="group-invite" style="font-size:32px;padding-right: 5px;"></a>
+        <a class="icon ion-log-out" ng-click="logout()" style="font-size:32px;"></a>
+    </ion-nav-buttons>
+
+
+    <ion-content>
+        <ion-spinner ng-hide="pageLoaded" class="pre-page-loader-spinner"></ion-spinner>
+
+        <ion-refresher
+                pulling-text="Puxe para atualizar"
+                on-refresh="refresh()">
+        </ion-refresher>
+
+        <div class="card" ng-show="messages.values.length > 0">
+            <div class="item item-divider">
+                {{ 'MESSAGES' | translate }}
+            </div>
+            <div class="item item-text-wrap" ng-repeat="m in messages.values">
+                <span ng-click="messageAction(m)">{{m.message}}<span>
+            </div>
+        </div>
+
+        <ion-list class="ng-hide" ng-show="pageLoaded">
+            <div class="item item-divider">
+                {{ 'ACTIVE_GROUPS' | translate }}
+            </div>
+
+            <div class="item item-text-wrap" ng-show="activityGroups.length == 0" style="text-align:justify;line-height:150%;margin:15px;">
+                {{ 'MESSAGE_EMPTY_ACTIVITY_SET_PART_1' | translate }}
+                <a ui-sref="groups">{{ 'CLICK_HERE' | translate }}</a>
+                {{ 'MESSAGE_EMPTY_ACTIVITY_SET_PART_2' | translate }}
+            </div>
+
+            <ion-item class="active-groups-list item-avatar item-icon-right" ng-repeat="group in activityGroups" type="item-text-wrap" ng-click="go(group)">
+                <img ng-src="{{group.photo}}" > <i ng-show="group.hasUnreadMessage" class="has-unread-message ion-email-unread"></i>
+                <h2>{{group.activity}} - {{group.level}}</h2>
+                <p>{{group.timestamp | date : 'dd/MM/yy hh:mm'}} | {{group.totalParticipants}}/{{group.players}} {{ 'MEMBERS' | translate }}</p>
+                <p>com {{group.with}}</p>
+                <i ng-repeat="p in group.platforms" class="icon ion-{{p.name}}-{{p.version}}"></i>
+
+                <ion-option-button class="button-assertive" ng-click="out(group)">
+                    {{ 'OUT' | translate }}
+                </ion-option-button>
+                <ion-option-button class="button-calm" ng-click="confirm(group)">
+                    {{ 'CONFIRM' | translate }}
+                </ion-option-button>
+            </ion-item>
+
+            <div class="item item-divider">
+                {{ 'PENDING_INVITES' | translate }}
+            </div>
+
+            <div class="item item-text-wrap" style="text-align:justify;line-height:150%;" ng-show="activityInvites.length == 0">
+                {{ 'EMPTY_INVITE_SET' | translate }}
+            </div>
+
+            <ion-item class="active-groups-list item-thumbnail-left item-avatar item-icon-right" ng-repeat="group in activityInvites" type="item-text-wrap">
+                <img ng-src="{{group.photo}}" >
+                <h2>{{group.name}}</h2>
+                <p>{{group.activity}} {{group.level}}</p>
+                <p>{{group.timestamp | date : 'dd/MM/yy hh:mm'}} | {{group.totalParticipants}}/{{group.players}} {{ 'MEMBERS' | translate }}</p>
+                <p>com {{group.with}} <i ng-repeat="p in group.platforms" class="icon ion-{{p.name}}-{{p.version}}"></i> </p>
+
+                <ion-option-button class="button-calm" ng-click="join(group)">
+                    {{ 'JOIN' | translate }}
+                </ion-option-button>
+                <ion-option-button class="button-assertive" ng-click="ignore(group)">
+                    {{ 'IGNORE' | translate }}
+                </ion-option-button>
+            </ion-item>
+
+        </ion-list>
+
+
+        <div ng-show="showPublicGroupSuggestions || showPublicActivitySuggestions">
+            <div ng-show="showPublicGroupSuggestions" class="card">
+                <div class="item item-text-wrap" style="text-align:justify;line-height:150%;margin:15px;">
+                    {{ 'SWIPE_TIP' | translate }} <img height="30" width="30" src="img/swipe.png"/>
+                </div>
+            </div>
+
+            <div class="item item-divider ng-hide" ng-show="showPublicGroupSuggestions">
+                {{ 'PUBLIC_GROUPS' | translate }}
+
+            </div>
+            <div class="item item-divider ng-hide" ng-show="showPublicActivitySuggestions">
+                {{ 'ACTIVITIES_SUGGESTIONS' | translate }}
+            </div>
+
+            <div ng-show="showPublicActivitySuggestions" class="card ng-hide">
+                <div class="item item-text-wrap" style="text-align:justify;line-height:200%;margin:15px;padding: 0px;">
+                    {{ 'EMPTY_ACTIVITY_SET_PART_1' | translate }}
+                    <i class="icon ion-ios-game-controller-b-outline" style="font-size:25px;"></i>
+                    {{ 'EMPTY_ACTIVITY_SET_PART_2' | translate }}
+                </div>
+            </div>
+
+            <div ng-show="showPublicGroupSuggestions || showPublicActivitySuggestions" class="list">
+                <ion-list>
+                    <div ng-show="suggestions.length == 0" class="item item-text-wrap">
+                        {{ 'NO_RECORD_FOUND' | translate }}
+                    </div>
+
+                    <ion-item class="public-private-groups-list item-avatar item-icon-right" ng-repeat="group in suggestions" type="item-text-wrap">
+                        <img ng-src="{{group.photo}}" >
+                        <h2 style="overflow: visible;">{{group.activity}} {{group.level}}</h2>
+                        <h2 ng-show="group.type == 'public'">{{group.name}}</h2>
+
+                        <p ng-show="group.type == 'activity'">{{group.name}}</p>
+                        <p ng-hide="group.type == 'activity'">{{group.text}}</p>
+                        <p>
+                            {{group.timestamp | date : 'dd/MM/yy hh:mm'}}
+                            {{group.totalParticipants}} {{ 'MEMBERS' | translate }} <span ng-show="showPublicGroupSuggestions">| {{group.totalActivities}} {{ 'ACTIVE_GROUPS' | translate }}</span>
+                        </p>
+                        <p class="platforms"><i ng-repeat="p in group.platforms" class="ion-{{p.name}}-{{p.version}} platform-icon"></i></p>
+
+                        <ion-option-button class="button-calm" ng-click="join(group)">
+                            {{ 'JOIN' | translate }}
+                        </ion-option-button>
+                    </ion-item>
+
+                </ion-list>
+
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

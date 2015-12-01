@@ -1,0 +1,265 @@
+/*
+	Search groups
+*/
+.groups-search.item {
+	padding: 0px;
+}
+
+/* Create Group */
+
+.create-group.item {
+	padding: 0px;
+}
+
+.create-group.create-button {
+	margin-top: 0px;
+}
+
+.create-group-item-avatar {
+	min-height: 0px;
+}
+
+.create-group-subjects.item {
+	min-height: 65px;
+}
+
+/* End Create Group */
+
+
+.login-icon {
+	width: 185px;
+	height: 195px;
+	margin-left: 21%;
+	background-image: url("../img/icon.png");
+}
+
+.pull-right {
+	float: right;
+}
+
+.pull-left {
+	float: left;
+}
+
+.platform-icon {
+	color:  #666;
+    font-size: 25px;
+    padding-right: 2px;
+    padding-left: 2px;
+}
+
+.platform-android .bar .title {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.group-photo {
+	margin-left: 3px;
+	border-bottom-left-radius: 50%;
+	border-bottom-right-radius: 50%;
+	border-top-left-radius: 50%;
+	border-top-right-radius: 50%;
+}
+
+.ion-search {
+	font-size: 30px
+}
+
+.item .chat{
+  white-space: normal !important;
+}
+
+.invite-date .item-toggle, .item-toggle.item-complex .item-content {
+	padding : 0px;
+	padding-bottom: 25px;
+	border: none;
+	position: inherit;
+	height: 40px;
+}
+
+.item-radio input:checked ~ .item-content{
+    border-color: #28a54c;
+    background-color: #33cd5f;
+    background-image: linear-gradient(0deg, #28a54c, #28a54c 50%, transparent 50%);
+    color: #fff;
+}
+
+.missing {
+	background-color: #e42012;
+	color: #fff;
+}
+
+.bar-energized .icon {
+	color: #000;
+}
+
+.chat.item-thumbnail-left {
+	padding-left: 70px;
+}
+
+.chat {
+	margin-left: 1px;
+	margin-top: 3px !important;
+}
+
+.chat .message-wrap {
+	padding: 5px;
+	background-color: #fff;
+	display: inline-block;
+	border-radius: 5px;
+   	-webkit-border-radius: 10px;
+}
+
+.chat .message {
+	margin-left: 2px;
+}
+
+.chat .sender {
+	color: #DC143C;
+}
+
+.chat .activity {
+	color: #00008B;
+}
+
+.chat .toggle {
+	top: 5px !important;
+}
+
+.chat .toggle-small {
+	padding: 0px 12px 5px 12px;
+	border: none;
+}
+
+.chat .invite-toogle {
+	top: 0px;
+}
+
+.col-95 {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 95%;
+    -moz-box-flex: 0;
+    -moz-flex: 0 0 95%;
+    -ms-flex: 0 0 95%;
+    flex: 0 0 95%;
+    max-width: 95%;
+}
+
+
+.loading-container{
+  -webkit-align-items: flex-start;
+  -moz-align-items: flex-start;
+  align-items: flex-start;
+  padding-top: 54px;
+}
+
+.loading{
+    border-radius: 30px;
+}
+
+.item-thumbnail-left, .item-thumbnail-left .item-content {
+	padding-left: 65px;
+}
+
+.item-thumbnail-left img {
+	max-height: 50px !important;
+	max-width: 50px !important;
+}
+
+.item .item-image .group-thumbnail img{
+	height: 200px;
+}
+
+.pre-page-loader-spinner {
+	margin-left: 47%;
+}
+
+
+.contacts .item.item-avatar {
+	height: 50px;
+	min-height : 50px;
+}
+
+.contacts .item.item-avatar img{
+	top: 5px;
+}
+
+.ion-valve-steam:before, .ion-playstation-ps4:before, .ion-xbox-one:before{display:inline-block;font-family:"Ionicons";speak:none;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;text-rendering:auto;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.ion-xbox-one:before{content:"\f30c"}
+.ion-playstation-ps4:before{content:"\f30a"}
+.ion-valve-steam:before{content:"\f30b"}
+
+.reserve .item-content {
+	background-color: #ddd;
+}
+
+.swipe-indicator {
+	float:right;
+	height: 25px;
+	width: 25px;
+}
+
+.message-sending {
+	background-color: #f5f5f5 !important;
+}
+
+.sending-message-text {
+	margin-left: 34px !important;
+}
+
+.has-unread-message {
+	position: absolute;
+	top: 2px;
+	left: 34px;
+	font-size: 20px;
+}
+
+.public-private-groups-list img:first-child {
+	left: 5px !important;
+}
+
+.public-private-groups-list .platforms {
+	position: absolute;
+	top: 7px;
+	right: 5px;
+	width: 60px;
+}
+
+.public-private-groups-list .platforms i{
+	float: right;
+	width: 30px;
+	height: 26px;
+}
+
+.public-private-groups-list.item-avatar .item-content {
+	padding-left: 55px !important;
+	height:85px;
+}
+
+/*
+	Tab Active Groups
+*/
+.active-groups-list img:first-child {
+	left: 5px !important;
+}
+
+.active-groups-list .platforms {
+	position: absolute;
+	top: 7px;
+	right: 5px;
+	width: 60px;
+}
+
+.active-groups-list .platforms i{
+	float: right;
+	width: 30px;
+	height: 26px;
+}
+
+.active-groups-list.item-avatar .item-content {
+	padding-left: 55px !important;
+	height:85px;
+}
+/*
+	End Tab Active Groups
+*/

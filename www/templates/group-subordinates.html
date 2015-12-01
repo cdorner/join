@@ -1,0 +1,26 @@
+<ion-view view-title="{{ 'ACTIVITIES' | translate }}">
+	<ion-nav-buttons>
+	</ion-nav-buttons>
+	<ion-content class="padding" style="background-color:#FFF8DC;">
+		<ion-spinner ng-hide="loaded" class="pre-page-loader-spinner"></ion-spinner>
+		<div class="ng-hide" ng-show="loaded ">
+			<ion-list>
+				<div class="item item-divider">{{ 'ACTIVITIES' | translate }}</div>
+				<div class="item ng-hide" ng-hide="activities.list">
+					{{ 'EMPTY_ACTIVITIES_SET' | translate }}
+				</div>
+				<ion-item class="item-thumbnail-left item-remove-animate item-avatar item-icon-right"
+						  ng-repeat="group in activities.list" type="item-text-wrap" href="#">
+					<img ng-src="{{group.photo}}" />
+					<p ng-hide="group.timestamp">{{group.participantes.length}}/{{group.activity.players}} {{ 'MEMBERS' | translate }}</p>
+					<p ng-hide="group.timestamp">{{group.text}}</p>
+					<p ng-show="group.timestamp">{{group.activity}} {{group.level}}</p>
+					<p ng-show="group.timestamp">{{group.timestamp | date : 'medium'}}</p>
+					<p>{{ 'WITH' | translate }} {{group.with}}</p>
+					<i ng-repeat="p in group.platforms" class="icon ion-{{p.name}}-{{p.version}}"></i>
+					<ion-option-button class="button-calm" ng-click="join(group)"> {{ 'JOIN' | translate }}</ion-option-button>
+				</ion-item>
+			</ion-list>
+		</div>
+	</ion-content>
+</ion-view>

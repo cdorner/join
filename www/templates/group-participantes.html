@@ -1,0 +1,91 @@
+<ion-view view-title="{{ 'MEMBERS' | translate }}">
+
+    <ion-nav-buttons side="right">
+        <i class="icon ion-person-add" style="font-size: 30px;" ng-click="showFriends()"></i>
+    </ion-nav-buttons>
+    <ion-content class="padding" style="background-color:#FFF8DC;">
+        <ion-spinner ng-hide="loaded" class="pre-page-loader-spinner"></ion-spinner>
+        <div ng-show="group">
+            <div class="item item-divider">
+                {{ 'MEMBERS' | translate }}
+                <span class="item-icon-right">
+                    <i ng-show="type == 'activity' && owner()" class="icon ion-arrow-swap ng-hide" style="padding-right: 40px;" ng-click="toggleReorderRoster()"></i>
+                    <i ng-show="type == 'activity'" class="icon ion-speakerphone" ng-click="requestConfirmation()"></i>
+                </span>
+            </div>
+
+            <ion-list show-reorder="enableReorderRoster">
+                <ion-item ng-repeat="p in participants" ng-click="openPopover(p, $event)" class="item item-icon-right item-accordion" ng-class="{'reserve' : group.type == 'activity' && p.priority > group.players}">
+                    {{p.nickname}}
+                    <i ng-show="p.status == 'requested'" class="icon ion-android-done" style="font-size: 30px;"></i>
+                    <i ng-show="p.status == 'sended'" class="icon ion-android-done-all" style="font-size: 30px;"></i>
+                    <i ng-show="p.status == 'confirmed'" class="icon ion-ios-checkmark-outline" style="font-size: 30px;"></i>
+                    <i ng-show="p.status == 'invited'" class="icon ion-email-unread" style="font-size: 30px;"></i>
+                    <ion-reorder-button class="ion-navicon"  on-reorder="reorderItem(p, $fromIndex, $toIndex)"> </ion-reorder-button>
+                </ion-item>
+            </ion-list>
+
+            <ion-infinite-scroll
+                    ng-if="hasMoreParticipants()" distance="1%"
+                    icon="ion-loading-c"
+                    on-infinite="loadParticipants()">
+            </ion-infinite-scroll>
+        </div>
+    </ion-content>
+
+    <script id="my-popover.html" type="text/ng-template">
+        <ion-popover-view style="height: 200px">
+            <ion-content>
+                <div class="list">
+                    <a class="item" href="#" ng-show="type == 'activity'" ng-click="requestConfirmation()">{{ 'REQUEST_CONFIRMATION' | translate }}</a>
+                    <a class="item" href="#" ng-click="follow()">{{ 'FOLLOW' | translate }}</a>
+                    <a class="item" href="#" ng-show="type != 'public' && owner()" ng-click=""></a>
+                    <a class="item" href="#" ng-show="type != 'public' && owner()" ng-click="kickPlayer()">{{ 'KICK-PLAYER' | translate }}</a>
+                </div>
+            </ion-content>
+        </ion-popover-view>
+    </script>
+
+    <script id="friends.html" type="text/ng-template">
+        <ion-modal-view>
+            <ion-header-bar class="bar-energized">
+                <button ng-click="closeModal()" class="button back-button buttons button-clear header-item" style=""><i class="icon ion-android-arrow-back"></i>
+                    <span class="back-text"></span></button>
+                <h1 class="title">{{ 'SELECT' | translate }}</h1>
+                <button class="button button-positive" ng-click="invite()">
+                    {{ 'INVITE' | translate }}
+                </button>
+            </ion-header-bar>
+            <ion-content>
+                <ul class="list">
+                    <div class="item item-divider">
+                        {{ 'FRIENDS' | translate }}
+                    </div>
+                    <li class="item" ng-show="followings.length == 0">
+                        {{ 'EMPTY_FRIENDS_SET' | translate }}
+                    </li>
+                    <li class="item item-checkbox" ng-repeat="f in followings">
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="f.invite" />
+                        </label>
+                        {{f.nickname}}
+                    </li>
+                    <div class="item item-divider">
+                        {{ 'FOLLOWERS' | translate }}
+                    </div>
+                    <li class="item" ng-show="followers.length == 0">
+                        {{ 'EMPTY_FOLLOWERS_SET' | translate }}
+                    </li>
+
+                    <li class="item item-checkbox" ng-repeat="f in followers" ng-hide="isMyContact(f)">
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="f.invite" />
+                        </label>
+                        {{f.nickname}}
+                    </li>
+                </ul>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
+</ion-view>

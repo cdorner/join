@@ -1,0 +1,160 @@
+<ion-view view-title="{{ 'INVITE' | translate }}">
+    <ion-nav-buttons side="left">
+        <button ng-click="back()" class="button back-button buttons  button-clear header-item">
+            <i class="icon {{backButtonClass}}"></i>{{backTitle}}
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content overflow-scroll="true">
+        <ion-spinner ng-hide="pageLoaded" class="pre-page-loader-spinner"></ion-spinner>
+        <ion-refresher
+                pulling-text="{{ 'PULL_TO_UPDATE' | translate }}"
+                on-refresh="refresh()">
+        </ion-refresher>
+
+        <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" auto-play="false">
+            <ion-slide>
+                <div class="ng-hide" ng-show="pageLoaded && privateGroups.length == 0 && publicGroups.length == 0">
+                    <div class="card">
+                        <div class="item item-text-wrap" style="text-align:justify;line-height:150%;margin:15px;">
+                            "{{ 'MESSAGE_EMPTY_GROUPS_SET_PART_1' | translate }}
+                            <a ui-sref="groups">{{ 'CLICK_HERE' | translate }}</a>
+                            {{ 'MESSAGE_EMPTY_GROUPS_SET_PART_2' | translate }}"
+                        </div>
+                    </div>
+                </div>
+
+                <div class="list" ng-show="pageLoaded && privateGroups.length != 0 || publicGroups.length != 0">
+                    <div class="item item-divider">
+                        {{ 'PRIVATE_GROUPS' | translate }}
+                    </div>
+                    <div class="item" ng-show="privateGroups.length == 0">
+                        {{ 'EMPTY_PRIVATE_GROUP_SET' | translate }}
+                    </div>
+                    <div class="list card" ng-repeat="g in privateGroups">
+                        <div class="item item-avatar">
+                            <img ng-src="{{g.photo}}" />
+                            <h2>{{g.name}}</h2>
+                            <p>{{g.totalParticipants}} {{ 'MEMBERS' | translate }}" | {{g.totalActivities}} {{ 'ACTIVE_GROUPS' | translate }}"</p>
+                            <p>{{g.text}}</p>
+                            <p><i ng-repeat="p in g.platforms" class="icon ion-{{p.name}}-{{p.version}}" style="font-size:25px;margin-right: 5px;"></i></p>
+                        </div>
+
+                        <div class="item item-image">
+                        </div>
+
+                        <a class="item item-icon-left assertive" href="#" ng-click="selectGroup(g)">
+                            <i class="icon ion-ios-checkmark-outline"></i>
+                            {{ 'INVITE_THIS_GROUP' | translate }}
+                        </a>
+                    </div>
+
+                    <div class="item item-divider">
+                        {{ 'PUBLIC_GROUPS' | translate }}
+                    </div>
+                    <div class="item" ng-show="publicGroups.length == 0">
+                        {{ 'EMPTY_PUBLIC_GROUPS_SET' | translate }}
+                    </div>
+                    <div class="list card" ng-repeat="g in publicGroups">
+                        <div class="item item-avatar">
+                            <img ng-src="{{g.photo}}" />
+                            <h2>{{g.name}}</h2>
+                            <p>{{g.totalParticipants}} {{ 'MEMBERS' | translate }} | {{g.totalActivities}} {{ 'ACTIVE_GROUPS' | translate }}</p>
+                            <p>{{g.text}}</p>
+                            <p> <i ng-repeat="p in g.platforms" class="icon ion-{{p.name}}-{{p.version}}" style="font-size:25px;margin-right: 5px;"></i></p>
+                        </div>
+
+                        <div class="item item-image">
+                        </div>
+
+                        <a class="item item-icon-left assertive" href="#" ng-click="selectGroup(g)">
+                            <i class="icon ion-ios-checkmark-outline"></i>
+                            {{ 'INVITE_THIS_GROUP' | translate }}
+                        </a>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-show="page == 'config'">
+
+                <div class="list">
+                    <div class="item item-avatar">
+                        <img ng-src="{{group.photo}}" />
+                        <h2>{{group.name}} - {{group.language}}</h2>
+                        <p>{{group.totalParticipants || 0}} {{ 'MEMBERS' | translate }} | {{group.totalActivities}} {{ 'ACTIVE_GROUPS' | translate }} </p>
+                        <p>{{group.text}}</p>
+                    </div>
+
+                    <div class="bar bar-stable" ng-class="{'bar-assertive' : missingPlatform}"><h1 class="title">{{ 'PLATFORM' | translate }}</h1></div>
+                    <div class="item item-divider missing">{{ 'PLATFORM' | translate }}</div>
+                    <ion-radio ng-repeat="p in group.platforms" ng-model="invite.platform" ng-value="{{p}}" style="text-transform: capitalize">{{p.name}} {{p.version}}</ion-radio>
+
+
+                    <div class="bar bar-stable" ng-class="{'bar-assertive' : missingActivity}"><h1 class="title">{{ 'ACTIVITY' | translate }}</h1></div>
+                    <div class="item item-divider missing">{{ 'ACTIVITY' | translate }}</div>
+
+                    <ion-radio ng-repeat="activity in group.activities" name="activities"
+                               ng-model="invite.activity" ng-value="{{activity}}" ng-change="activitySelected()">{{activity.name}}</ion-radio>
+
+                    <label class="item item-stacked-label" ng-show="!group.activities || group.activities.lenght == 0">
+                        <span class="input-label">{{ 'ACTIVITY' | translate }}</span>
+                        <input type="text" ng-model="invite.activity" placeholder="Raid, Osiris, Multiplayer, Campanha" ng-required="true" />
+                    </label>
+
+                    <div class="bar bar-stable" ng-class="{'bar-assertive' : missingPlayers}"><h1 class="title">{{ 'PLAYERS_TOTAL' | translate }} | {{invite.players}}</h1></div>
+                    <div class="item item-divider">{{ 'PLAYERS_TOTAL' | translate }} | {{invite.players}}</div>
+
+                    <label class="item item-stacked-label">
+                        <div class="item range">
+                            <i class="icon ion-ios-minus-outline"></i>
+                            <input id="playersRange" type="range" ng-model="invite.players" ng-value="invite.activity.players" min="1" max="{{invite.activity.players}}" step="1"/>
+                            <i class="icon ion-ios-plus-outline"></i>
+                        </div>
+                    </label>
+
+                    <div class="bar bar-stable" ng-class="{'bar-assertive' : missingLevel}"><h1 class="title">{{ 'LEVEL' | translate }}</h1></div>
+                    <div class="item item-divider">{{ 'LEVEL' | translate }}</div>
+
+                    <ion-radio ng-repeat="level in group.levels" name="levels"
+                               ng-model="invite.level" ng-value="{{level}}" ng-change="levelSelected()">{{level.name}}</ion-radio>
+
+                    <label class="item item-input item-stacked-label" ng-show="!group.levels || group.levels.length == 0">
+                        <span class="input-label">{{ 'LEVEL' | translate }}</span>
+                        <input type="text" ng-model="invite.level" placeholder="Normal, Hard"/>
+                    </label>
+
+                    <div class="bar bar-stable" ng-class="{'bar-assertive' : missingDatetime}"><h1 class="title">{{ 'DATE-TIME' | translate }}</h1></div>
+                    <div class="item item-divider">{{ 'DATE-TIME' | translate }}</div>
+
+                    <div class="row invite-date">
+                        <div class="col-50 text-center">
+                            <label class="item item-input item-stacked-label text-center" style="border-style:none;padding:0px;">
+                                <span class="input-label">{{ 'DATE' | translate }}</span>
+                                <input type="date" ng-model="invite.date" placeholder="dd/MM/yyyy"
+                                       size="12" class="text-center" style="border:solid thin #ddd;"/>
+                            </label>
+                        </div>
+                        <div class="col-50 text-center">
+                            <label class="item item-input item-stacked-label text-center" style="border-style:none;padding:0px;">
+                                <span class="input-label">{{ 'TIME' | translate }}</span>
+                                <input type="text" readonly="readonly" size="5" ng-model="invite.time" placeholder="hh:mm" size="5" class="text-center stable" style="border:solid thin #ddd;"/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row invite-date">
+                        <div class="col text-center">
+                            <div class="item range">
+                                <i class="icon ion-ios-sunny-outline"></i>
+                                <input type="range" name="volume" ng-change="timeChange()" ng-model="invite.rangeTime" min="0" max="1439" step="10"/>
+                                <i class="icon ion-ios-moon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="button button-outline button-energized button-large" ng-click="backOneSlide()">{{ 'BACK' | translate }}</button>
+                    <button class="button button-outline button-positive button-large" ng-click="sendInvite()" style="float:right;">{{ 'INVITE' | translate }}</button>
+                </div>
+
+            </ion-slide>
+        </ion-slide-box>
+    </ion-content>
+</ion-view>

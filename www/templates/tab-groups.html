@@ -1,0 +1,54 @@
+<ion-view view-title="{{ 'GROUPS' | translate }}">
+
+    <ion-nav-buttons side="right">
+        <a class="icon ion-ios-game-controller-b-outline" href="#/invite" style="font-size:32px;padding:5px;"></a>
+        <a class="icon ion-search" href="#/groups/search" style="font-size:32px;padding:5px;"></a>
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-spinner ng-hide="pageLoaded" class="pre-page-loader-spinner"></ion-spinner>
+        <ion-refresher
+                pulling-text="{{ 'PULL_TO_UPDATE' | translate }}"
+                on-refresh="refresh()">
+        </ion-refresher>
+
+        <ion-list class="ng-hide" ng-show="pageLoaded">
+            <div class="item item-divider">
+                {{ 'PRIVATE_GROUPS' | translate }}
+                <img src="img/swipe.png" class="swipe-indicator"/>
+            </div>
+            <ion-item class="public-private-groups-list item-avatar item-icon-right" ng-repeat="g in privateGroups" type="item-text-wrap" ng-click="go(g)">
+                <img ng-src="{{g.photo}}"> <i ng-show="g.hasUnreadMessage" class="has-unread-message ion-email-unread"></i>
+                <h2>{{g.name}}</h2>
+                <p>{{g.text}}</p>
+                <p>{{g.totalParticipants}} Participantes {{g.totalActivities}} Grupos ativos</p>
+                <p class="platforms"><i ng-repeat="p in g.platforms" class="ion-{{p.name}}-{{p.version}} platform-icon"></i> </p>
+
+                <ion-option-button class="button-assertive" ng-click="out(g, 'private')">
+                    {{ 'OUT' | translate }}
+                </ion-option-button>
+            </ion-item>
+            <ion-item ng-hide="privateGroups" class="text-center" type="item-text-wrap">
+                {{ 'EMPTY_PRIVATE_GROUP_SET' | translate }}
+            </ion-item>
+            <div class="item item-divider">
+                {{ 'PUBLIC_GROUPS' | translate }}
+                <img src="img/swipe.png" class="swipe-indicator"/>
+            </div>
+            <ion-item class="public-private-groups-list item-avatar item-icon-right" ng-repeat="g in publicGroups" type="item-text-wrap" ng-click="go(g)">
+                <img ng-src="{{g.photo}}"> <i ng-show="g.hasUnreadMessage" class="has-unread-message ion-email-unread"></i>
+                <h2>{{g.name}}</h2>
+                <p>{{g.text}}</p>
+                <p>{{g.totalParticipants}} {{ 'MEMBERS' | translate }} {{g.totalActivities}} {{ 'ACTIVE_GROUPS' | translate }}</p>
+                <p class="platforms"><i ng-repeat="p in g.platforms" class="ion-{{p.name}}-{{p.version}} platform-icon"></i> </p>
+
+                <ion-option-button class="button-assertive" ng-click="out(g, 'public')">
+                    {{ 'OUT' | translate }}
+                </ion-option-button>
+            </ion-item>
+            <ion-item ng-hide="publicGroups" class="text-center" type="item-text-wrap">
+                {{ 'EMPTY_PUBLIC_GROUPS_SET' | translate }}
+            </ion-item>
+        </ion-list>
+
+    </ion-content>
+</ion-view>

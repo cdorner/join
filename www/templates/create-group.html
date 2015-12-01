@@ -1,0 +1,83 @@
+<ion-view view-title="{{ 'CREATE' | translate }}">
+
+    <ion-nav-bar no-tap-scroll="true" class="bar-energized">
+        <ion-nav-back-button ng-click="back()">
+        </ion-nav-back-button>
+
+        <ion-nav-buttons side="right">
+            <button ng-show="subject" class="create-group create-button button button-block button-positive ng-hide" ng-click="create()">{{ 'CREATE' | translate }}</button>
+        </ion-nav-buttons>
+
+    </ion-nav-bar>
+
+    <ion-content>
+        <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" auto-play="false">
+            <ion-slide>
+                <div class="list">
+                    <div class="item item-divider">
+                        {{ 'CHOOSE_ONE_GROUP' | translate }}
+                    </div>
+                    <div class="create-group item">
+                        <div class="item item-input">
+                            <i class="icon ion-search" style="font-size: 20px;padding-right: 15px;"></i>
+                            <input type="text" placeholder="{{ 'SEARCH' | translate }}" ng-model="search.text">
+                            <i ng-click="cancelSearch()" ng-show="search.text" class="icon ion-ios-close-empty pull-right" style="font-size: 22px;"></i>
+                        </div>
+                    </div>
+                    <div class="create-group-subjects item item-thumbnail-left item-avatar" ng-repeat="s in subjects | filter:{name : search.text}" ng-click="select(s)">
+                        <img ng-src="{{s.photo}}">
+                        <h2>{{s.name}}</h2>
+                        <p style="text-transform:capitalize;">{{s.platform.name}} {{s.platform.version}}
+                            <i ng-repeat="p in s.platforms" class="icon ion-{{p.name}}-{{p.version}}" style="font-size:25px;float:right;white-space: normal !important;padding-right: 5px;"></i>
+                        </p>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide>
+                <div class="create-group-item-avatar item item-thumbnail-left item-avatar item-text-wrap" style="border: 0px;">
+                    <img ng-src="{{subject.photo}}">
+                    <h2>{{ 'PRIVATE_GROUP_OF' | translate }} {{subject.name}}.</h2>
+                </div>
+
+                <div class="row assertive">
+                    <div class="col">{{message}}</div>
+                </div>
+
+                <div class="row">
+                    <div class="pull-right text-center" style="margin-right: 10px;text-transform: capitalize" ng-repeat="p in platforms">
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="p.selected">
+                        </label>
+                        {{p.name}} {{p.version}}
+                    </div>
+                </div>
+
+                <label class="item item-input">
+                    <input type="text" placeholder="{{ 'NAME' | translate }}" ng-model="group.name">
+                </label>
+                <label class="item item-input">
+                    <input type="text" placeholder="{{ 'DESCRIPTION' | translate }}" ng-model="group.text">
+                </label>
+
+                <div class="item item-input">
+                    {{ 'SELECT_FRIENDS' | translate }}. {{(followers | filter:{'selected':true}).length}} {{ 'SELECTED' | translate }}
+                    <i ng-click="cancelSearch()" ng-show="search.text" class="icon ion-android-done-all padding" style="font-size: 25px;"></i>
+                </div>
+
+                <ul class="list" style="margin-top: 1px;">
+                    <li class="item" ng-show="followers.length == 0">
+                        {{ 'EMPTY_FRIENDS_SET' | translate }}
+                    </li>
+                    <li class="item item-checkbox item-avatar-right" ng-repeat="f in followers | filter:{'nickname': search.text}">
+                        <img ng-src="{{f.photo}}">
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="f.selected">
+                        </label>
+                        {{f.nickname}}
+                    </li>
+                </ul>
+
+            </ion-slide>
+        </ion-slide-box>
+    </ion-content>
+</ion-view>

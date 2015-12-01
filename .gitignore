@@ -1,0 +1,6 @@
+platforms
+node_modules
+plugins
+.cordova
+.idea
+server/join-server/node_modules

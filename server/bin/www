@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+process.env.FIREBASE = "https://join-development.firebaseio.com/";
+process.env.SECRET = "vruZVuQnCnmfpJAVBJXwtlBZX3XlYb3TLQ6X1Txo";
+
+var app = require('../app');
+var debug = require('debug')('join-server:server');
+process.on('uncaughtException', function(err){
+    debug('Whoops! ' + err.message + " \r\n" + err.stack);
+    debug("Don't worry the server still up");
+});

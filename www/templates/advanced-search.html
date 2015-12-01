@@ -1,0 +1,45 @@
+<ion-view view-title="{{ 'SEARCH' | translate }}">
+    <ion-nav-buttons side="left">
+        <button ng-click="$ionicGoBack()" class="button back-button buttons  button-clear header-item">
+            <i class="icon {{backButtonClass}}"></i>{{backTitle}}
+        </button>
+    </ion-nav-buttons>
+
+
+    <ion-nav-buttons side="right">
+        <button ng-click="new()" class="button button-icon icon ion-plus-round" style="color: #000;"></button>
+    </ion-nav-buttons>
+    <ion-content overflow-scroll="true">
+        <ion-refresher
+                pulling-text="{{ 'PULL_TO_UPDATE' | translate }}"
+                on-refresh="refresh()">
+        </ion-refresher>
+
+        <ion-list>
+            <div class="item item-divider">
+                {{ 'PUBLIC_GROUPS' | translate }}
+                <img src="img/swipe.png" class="swipe-indicator"/>
+            </div>
+            <div class="groups-search item">
+                <div class="item item-input">
+                    <i class="icon ion-search" style="font-size: 20px;padding-right: 15px;"></i>
+                    <input type="text" placeholder="{{ 'SEARCH' | translate }}" ng-model="search.text">
+                    <i ng-click="cancelSearch()" ng-show="search.text" class="icon ion-ios-close-empty" style="font-size: 22px;"></i>
+                </div>
+            </div>
+
+            <ion-item class="public-private-groups-list item item-avatar item-icon-right" ng-repeat="g in groups | filter:{name : search.text}">
+                <img ng-src="{{g.photo}}">
+                <h2>{{g.name}}</h2>
+                <p>{{g.text}}</p>
+                <p class="platforms"><i ng-repeat="p in g.platforms" class="ion-{{p.name}}-{{p.version}} platform-icon"></i> </p>
+                <p>{{g.totalParticipants}} {{ 'MEMBERS' | translate }} | {{g.totalActivities}} {{ 'ACTIVE_GROUPS' | translate }}</p>
+
+                <ion-option-button class="button-calm" ng-click="enter(g)">
+                    {{ 'JOIN' | translate }}
+                </ion-option-button>
+            </ion-item>
+
+        </ion-list>
+    </ion-content>
+</ion-view>

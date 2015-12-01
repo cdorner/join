@@ -1,0 +1,37 @@
+<ion-view view-title="{{ 'JOIN' | translate }}">
+
+	<div class="bar bar-header bar-dark"></div>
+	<ion-content>
+    <form action="" name="registers" novalidate>
+		<div class="list list-inset">
+			<label class="item item-input">
+				<input type="text" placeholder="{{ 'NAME' | translate }}" ng-required="true" ng-model="user.name"/>
+			</label>
+			<label class="item item-input">
+				<input type="email" placeholder="{{ 'EMAIL' | translate }}" ng-required="true" ng-model="user.email"/>
+			</label>
+			<label class="item item-input">
+				<input type="text" placeholder="{{ 'GAMERTAG' | translate }}" ng-required="true" ng-model="user.gamertag"/>
+			</label>
+			<label class="item item-input">
+				<input type="password" placeholder="{{ 'PASSWORD' | translate }}" ng-required="true" ng-model="user.password"/>
+			</label>
+		</div>
+
+		<div class="button-bar">
+			<a class="button button-outline button-positive" ui-sref="login">
+				{{ 'BACK' | translate }}
+			</a>
+			<button class="button button-outline button-positive " ng-disabled="registers.$invalid" type="button" ng-click="register()">
+				{{ 'REGISTER' | translate }}
+			</button>
+		</div>
+	</form>
+
+	<ul class="list">
+		<li class="item assertive" ng-repeat="m in messages">
+			{{m}}
+		</li>
+	</ul>
+  </ion-content>
+</ion-view>

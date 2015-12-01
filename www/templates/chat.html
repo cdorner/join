@@ -1,0 +1,78 @@
+<ion-view>
+    <ion-nav-title>
+        <div class="title title-left header-item">
+            <img ng-src="{{group.photo}}" class="icon group-photo" style="width: 32px; height: 32px;margin-top: 5px;" />
+            {{group.name}}
+        </div>
+    </ion-nav-title>
+
+    <ion-nav-buttons side="right">
+        <!-- menu-toggle="right" doesn't work-->
+        <button  ng-click="sideMenuToggle()" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+
+    <ion-side-menus>
+
+        <ion-side-menu-content>
+            <ion-content class="" style="background-color:#FFF8DC;" ng-click="shouldNotFocusOnBlur()" delegate-handle="main">
+                <button class="button button-block button-light" ng-click="showPriorMessage()" style="font-size: 10px;margin-top: 0;min-height: 35px;height: 35px;">
+                    {{ 'LOAD_PREVIOUS_MESSAGES' | translate }}
+                </button>
+                <ion-spinner ng-hide="loaded" class="pre-page-loader-spinner"></ion-spinner>
+
+                <div id="messagesBox" ng-show="group" class="padding" style="margin-bottom:10px;">
+
+                </div>
+
+                <script id="choose-platforms.html" type="text/ng-template">
+                    <ion-modal-view>
+                        <ion-header-bar>
+                            <h1 class="title">{{ 'INTEREST_PLATFORMS' | translate }}</h1>
+                        </ion-header-bar>
+                        <ion-content>
+                            <div ng-repeat="p in platforms">
+                                <ion-toggle ng-model="p.allow" toggle-class="toggle-calm" ng-change="onPlatformChange(p)">{{p.name}} {{p.version}}</ion-toggle>
+                            </div>
+                        </ion-content>
+                        <ion-footer-bar align-title="center" class="bar-assertive" ng-click="closeModal()">
+                            <h1 class="title">{{ 'BACK' | translate }}</h1>
+                        </ion-footer-bar>
+                    </ion-modal-view>
+                </script>
+            </ion-content>
+            <ion-footer-bar keyboard-attach class="" style="margin-top:20px;background-color: transparent;">
+                <label class="item-input-wrapper" style="margin: 0px;padding: 0px">
+            <textarea placeholder="Digite aqui..." ng-model="conversation.text" style="width: 100%"
+                      detect-focus on-focus="scrollContentToBottom()" on-blur="scrollContentToBottom()" focus-on-blur="focusManager.focusInputOnBlur"
+                    ></textarea>
+                </label>
+                <button class="button button-icon" ng-click="sendMessage()">
+                    <i class="icon ion-android-send" style="font-size:25px;" ></i>
+                </button>
+            </ion-footer-bar>
+
+        </ion-side-menu-content>
+
+        <!-- Right menu -->
+        <ion-side-menu side="right">
+            <header class="bar bar-header bar-stable">
+                <h1 class="title">{{ 'OPTIONS' | translate }}</h1>
+            </header>
+            <ion-content class="has-header">
+                <ul class="list">
+                    <a class="item" ui-sref="group_options({'type': type, 'groupId' : group.id})" ng-click="sideMenuToggle()">{{ 'GROUP_INFO' | translate }}</a>
+                    <a class="item" ui-sref="group_participantes({'type': type, 'groupId' : group.id})" ng-click="sideMenuToggle()">{{ 'MEMBERS' | translate }}</a>
+                    <a class="item" ng-hide="group.timestamp" ui-sref="group_subordinates({'type': type, 'groupId' : group.id})" ng-click="sideMenuToggle()">{{ 'ACTIVE_GROUPS' | translate }}</a>
+                    <a class="item" ng-show="isEditable" ui-sref="edit_activity({'type': type, 'groupId' : group.id})" ng-click="sideMenuToggle()">{{ 'EDIT' | translate }}</a>
+                    <a class="item" ng-show="type == 'public'" ng-click="sideMenuToggle(); choosePlatforms();">{{ 'PLATFORMS' | translate }}</a>
+                    <ion-toggle ng-change="toogleDisableScroll()" ng-model="disableScroll" toggle-class="toggle-calm">
+                        {{ 'DISABLE_SCROLL' | translate }}
+                    </ion-toggle>
+                </ul>
+            </ion-content>
+        </ion-side-menu>
+
+    </ion-side-menus>
+
+</ion-view>
+

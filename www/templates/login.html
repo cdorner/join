@@ -1,0 +1,26 @@
+<ion-view view-title="Join">
+
+	<div class="bar bar-header bar-dark ng-hide" ng-show="!isUserLogged()"></div>
+	<ion-content>
+		<div class="login-icon"></div>
+		<form action="" name="login" novalidate>
+			<div class="list list-inset">
+				<label class="item item-input">
+					<input type="email" placeholder="{{ 'EMAIL' | translate }}" ng-model="user.email" ng-required="true" />
+				</label>
+				<label class="item item-input">
+					<input type="password" placeholder="{{ 'PASSWORD' | translate }}" ng-model="user.password" ng-required="true" />
+				</label>
+			</div>
+
+			<div class="button-bar">
+				<a class="button button-outline button-positive" ui-sref="register" type="submit">
+					{{ 'REGISTER' | translate }}
+				</a>
+				<button class="button button-outline button-positive " ng-disabled="login.$invalid" type="button" ng-click="tryLogin()">
+					{{ 'ENTER' | translate }}
+				</button>
+			</div>
+		</form>
+	</ion-content>
+</ion-view>
