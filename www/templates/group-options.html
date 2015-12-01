@@ -1,0 +1,47 @@
+<ion-view view-title="Opções">
+	<ion-nav-buttons>
+	</ion-nav-buttons>
+
+	<ion-content class="padding" style="background-color:#FFF8DC;" >
+		<ion-spinner ng-hide="group" class="pre-page-loader-spinner"></ion-spinner>
+		<div ng-show="group">
+			<div class="list card">
+				<div class="item item-image group-thumbnail">
+					<img ng-src="{{group.photo}}">
+				</div>
+				<div class="item item-avatar">
+					<img class="group-thumbnail" ng-src="{{group.photo}}">
+					<h2>{{group.name}}</h2>
+					<p>
+						<a class="subdued" ui-sref="group_participantes({'type': type, 'groupId' : group.$id})">{{group.totalParticipantes}} Participantes</a>
+						<a ng-hide="group.timestamp" class="subdued" ui-sref="group_subordinates({'groupId' : group.$id})">{{group.totalSubordinates}} Grupos Ativos</a>
+					</p>
+					<p>
+						Data/Hora: {{group.timestamp | date : 'medium'}}
+					</p>
+					<p>
+						Atividade: {{group.activity}}
+					</p>
+					<p>
+						Level: {{group.level}}
+					</p>
+					<p>
+						Plataformas: <i ng-repeat="p in group.platforms" class="icon ion-{{p.name}}-{{p.version}}" style="font-size:32px;margin-right: 5px;"></i>
+					</p>
+				</div>
+				<li class="item item-checkbox pull-left">
+					<label class="checkbox"> <input type="checkbox" ng-model="group.silent" ng-change="toogleSilent()"> </label>
+					Silenciar
+				</li>
+				<div class="item item-icon-left assertive" href="#">
+
+				</div>
+			</div>
+
+			<button class="button button-full button-assertive" ng-click="out()">
+				Sair do Grupo
+			</button>
+
+		</div>
+	</ion-content>
+</ion-view>

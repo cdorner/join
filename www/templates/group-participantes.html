@@ -1,0 +1,92 @@
+<ion-view view-title="Participantes">
+
+    <ion-nav-buttons side="right">
+        <i class="icon ion-person-add" style="font-size: 30px;" ng-click="showFriends()"></i>
+    </ion-nav-buttons>
+    <ion-content class="padding" style="background-color:#FFF8DC;">
+        <ion-spinner ng-hide="loaded" class="pre-page-loader-spinner"></ion-spinner>
+        <div ng-show="group">
+            <div class="item item-divider">
+                Participantes
+            </div>
+            <div class="item item-divider" ng-show="group.timestamp">Titulares
+			<span class="item-icon-right">
+				<i class="icon ion-speakerphone" ng-click="requestConfirmation()"></i>
+			</span>
+            </div>
+            <div ng-click="openPopover(p, $event)" class="item item-icon-right item-accordion" href="#" ng-repeat="p in participantes">
+                {{p.nickname}}
+                <i ng-show="p.status == 'requested'" class="icon ion-android-done" style="font-size: 30px;"></i>
+                <i ng-show="p.status == 'sended'" class="icon ion-android-done-all" style="font-size: 30px;"></i>
+                <i ng-show="p.status == 'confirmed'" class="icon ion-ios-checkmark-outline" style="font-size: 30px;"></i>
+            </div>
+            <div class="item item-divider" ng-show="group.timestamp">Reservas</div>
+
+            <ion-infinite-scroll
+                    ng-if="hasMoreParticipantes()" distance="1%"
+                    icon="ion-loading-c"
+                    on-infinite="loadParticipantes()">
+            </ion-infinite-scroll>
+
+            <button class="button button-full button-assertive" ng-click="out()">
+                Sair do Grupo
+            </button>
+        </div>
+    </ion-content>
+
+    <script id="my-popover.html" type="text/ng-template">
+        <ion-popover-view style="height: 200px">
+            <ion-content>
+                <div class="list">
+                    <a class="item" href="#" ng-show="type == 'activity'" ng-click="requestConfirmation()">Solicitar confirmação</a>
+                    <a class="item" href="#" ng-click="follow()">Seguir</a>
+                    <a class="item" href="#" ng-show="type == 'activity' && owner()" ng-click=""></a>
+                    <a class="item" href="#" ng-show="type == 'activity' && owner()" ng-click="kickPlayer()">Ban Jogador</a>
+                </div>
+            </ion-content>
+        </ion-popover-view>
+    </script>
+
+    <script id="friends.html" type="text/ng-template">
+        <ion-modal-view>
+            <ion-header-bar class="bar-energized">
+                <button ng-click="closeModal()" class="button back-button buttons button-clear header-item" style=""><i class="icon ion-android-arrow-back"></i>
+                    <span class="back-text"></span></button>
+                <h1 class="title">Selecione</h1>
+                <button class="button button-positive" ng-click="invite()">
+                    Convidar
+                </button>
+            </ion-header-bar>
+            <ion-content>
+                <ul class="list">
+                    <div class="item item-divider">
+                        Seguindo
+                    </div>
+                    <li class="item" ng-show="followings.length == 0">
+                        Você não está seguindo ninguém
+                    </li>
+                    <li class="item item-checkbox" ng-repeat="f in followings">
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="f.invite" />
+                        </label>
+                        {{f.nickname}}
+                    </li>
+                    <div class="item item-divider">
+                        Seguidores
+                    </div>
+                    <li class="item" ng-show="followers.length == 0">
+                        Nenhum seguidor encontrado
+                    </li>
+
+                    <li class="item item-checkbox" ng-repeat="f in followers" ng-hide="isMyContact(f)">
+                        <label class="checkbox">
+                            <input type="checkbox" ng-model="f.invite" />
+                        </label>
+                        {{f.nickname}}
+                    </li>
+                </ul>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
+</ion-view>

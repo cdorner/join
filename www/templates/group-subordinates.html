@@ -1,0 +1,27 @@
+<ion-view view-title="Grupos ativos">
+	<ion-nav-buttons>
+	</ion-nav-buttons>
+	<ion-content class="padding" style="background-color:#FFF8DC;">
+		<div>
+			<ion-list>
+				<div class="item item-divider">Grupos ativos</div>
+				<ion-item class="item-thumbnail-left item-remove-animate item-avatar item-icon-right"
+					ng-repeat="group in subordinates" type="item-text-wrap" href="#">
+					<img ng-src="{{group.photo}}" />
+					<p ng-hide="group.timestamp">{{group.participantes.length}}/{{group.activity.players}} Participantes</p>
+					<p ng-hide="group.timestamp">{{group.text}}</p>
+					<p ng-show="group.timestamp">{{group.activity}} {{group.level}}</p>
+					<p ng-show="group.timestamp">{{group.timestamp | date : 'medium'}}</p>
+					<p>com {{group.with}}</p>
+					<i ng-repeat="p in group.platforms" class="icon ion-{{p.name}}-{{p.version}}"></i>
+				<ion-option-button class="button-calm" ng-click="join(group)"> Join </ion-option-button>
+			</ion-item>
+		</ion-list>
+		
+		<ion-infinite-scroll
+		ng-if="hasMoreSubordinates()" distance="1%"
+		icon="ion-loading-c"
+		on-infinite="loadSubordinates()">
+		</ion-infinite-scroll>
+	</ion-content>
+</ion-view>

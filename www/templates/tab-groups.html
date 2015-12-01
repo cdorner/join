@@ -1,0 +1,60 @@
+<ion-view view-title="Grupos">
+
+    <ion-nav-buttons side="right">
+        <a class="icon ion-ios-game-controller-b-outline" href="#/invite" style="font-size:32px;padding:5px;"></a>
+        <a class="icon ion-search" href="#/groups/search" style="font-size:32px;padding:5px;"></a>
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-refresher
+                pulling-text="Puxe para atualizar"
+                on-refresh="refresh()">
+        </ion-refresher>
+
+        <ion-list>
+            <div class="item item-divider">
+                Grupos privados
+            </div>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="g in privateGroups" type="item-text-wrap"
+                      ui-sref="group_chat({'type':'private', 'groupId' : g.$id})">
+                <img ng-src="{{g.photo}}">
+                <h2>{{g.name}}</h2>
+                <p>{{g.text}}</p>
+                <p>{{g.totalParticipants}} Participantes {{g.totalActivities}} Grupos ativos</p>
+                <p><i ng-repeat="p in g.platforms" class="ion-{{p.name}}-{{p.version}} platform-icon"></i> </p>
+
+                <ion-option-button class="button-assertive" ng-click="out(g, 'private')">
+                    Sair
+                </ion-option-button>
+            </ion-item>
+            <ion-item ng-show="privateGroups.length == 0" class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap">
+                Você não participa de nenhum
+            </ion-item>
+            <div class="item item-divider">
+                Grupos públicos
+            </div>
+            <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="g in publicGroups" type="item-text-wrap"
+                      ui-sref="group_chat({'type':'public', 'groupId' : g.$id})" >
+                <img ng-src="{{g.photo}}">
+                <h2>{{g.name}}</h2>
+                <p>{{g.text}}</p>
+                <p>{{g.totalParticipants}} Participantes {{g.totalActivities}} Grupos ativos</p>
+                <p><i ng-repeat="p in g.platforms" class="ion-{{p.name}}-{{p.version}} platform-icon"></i> </p>
+
+                <ion-option-button class="button-assertive" ng-click="out(g, 'public')">
+                    Sair
+                </ion-option-button>
+            </ion-item>
+            <ion-item ng-show="publicGroups.length == 0" class="item-remove-animate item-avatar item-icon-right" type="item-text-wrap">
+                Você não participa de nenhum
+            </ion-item>
+        </ion-list>
+
+        <div ng-show="groups.length == 0">
+            <h4 style="text-align:justify;line-height:200%;margin:15px;">Voce nao participa de nenhum grupo no momento, procure por grupos clicando no icone <i class="icon ion-android-contacts" style="font-size:25px;"></i> na barra superior ou no botao abaixo </h4>
+            <a class="button button-block button-outline button-positive" ui-sref="group-advanced-search">
+                Procurar
+            </a>
+        </div>
+
+    </ion-content>
+</ion-view>

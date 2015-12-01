@@ -1,0 +1,154 @@
+<ion-view view-title="Convidar">
+    <ion-nav-buttons side="left">
+        <button ng-click="back()" class="button back-button buttons  button-clear header-item">
+            <i class="icon {{backButtonClass}}"></i>{{backTitle}}
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content overflow-scroll="true">
+        <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" auto-play="false">
+            <ion-slide>
+                <div class="ng-hide" ng-show="privateGroups.length == 0 && publicGroups.length == 0">
+                    <div class="card">
+                        <div class="item item-text-wrap" style="text-align:justify;line-height:150%;margin:15px;">
+                            "Ops... Nada está aparecendo aqui porque você nao esta seguindo nenhum grupo, <a ui-sref="groups">clique aqui</a> e procure um grupo de seu interesse, de join, faça amigos e comece a se divertir jogando junto com eles."
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-show="privateGroups.length != 0 || publicGroups.length != 0">
+                    <div class="item item-divider">
+                        Grupos privados
+                    </div>
+                    <div class="item" ng-show="privateGroups.length == 0">
+                        Nenhum grupo privado
+                    </div>
+                    <div class="list card" ng-repeat="g in privateGroups">
+                        <div class="item item-avatar">
+                            <img ng-src="{{g.photo}}" />
+                            <h2>{{g.name}} - {{g.language}} </h2>
+                            <p>{{g.totalParticipants}} Participantes</p>
+                            <p>{{g.totalActivities}} Grupos ativos</p>
+                            <p>{{g.text}}</p>
+                            <p>Plataformas: <i ng-repeat="p in g.platforms" class="icon ion-{{p.name}}-{{p.version}}" style="font-size:25px;margin-right: 5px;"></i></p>
+                        </div>
+
+                        <div class="item item-image">
+                        </div>
+
+                        <a class="item item-icon-left assertive" href="#" ng-click="selectGroup(g)">
+                            <i class="icon ion-ios-checkmark-outline"></i>
+                            Convidar este grupo
+                        </a>
+                    </div>
+
+                    <div class="item item-divider">
+                        Grupos públicos
+                    </div>
+                    <div class="item" ng-show="publicGroups.length == 0">
+                        Nenhum grupo privado
+                    </div>
+                    <div class="list card" ng-repeat="g in publicGroups">
+                        <div class="item item-avatar">
+                            <img ng-src="{{g.photo}}" />
+                            <h2>{{g.name}} - {{g.language}} </h2>
+                            <p>{{g.totalParticipants}} Pessoas no grupo </p>
+                            <p>{{g.totalActivities}} Grupos ativos</p>
+                            <p>{{g.text}}</p>
+                            <p>Plataformas: <i ng-repeat="p in g.platforms" class="icon ion-{{p.name}}-{{p.version}}" style="font-size:25px;margin-right: 5px;"></i></p>
+                        </div>
+
+                        <div class="item item-image">
+                        </div>
+
+                        <a class="item item-icon-left assertive" href="#" ng-click="selectGroup(g)">
+                            <i class="icon ion-ios-checkmark-outline"></i>
+                            Convidar este grupo
+                        </a>
+                    </div>
+                </div>
+            </ion-slide>
+            <ion-slide ng-show="page == 'config'">
+
+                <div class="list">
+                    <div class="item item-avatar">
+                        <img ng-src="{{group.photo}}" /> <i class="icon ion-xbox" style="font-size:42px;float:right"></i>
+                        <h2>{{group.name}} - {{group.language}} </h2>
+                        <p>{{group.totalParticipants || 0}} Pessoas no grupo </p>
+                        <p>{{group.text}}</p>
+                    </div>
+
+                    <div class="bar bar-stable" ng-class="{'bar-assertive' : missingPlatform}"><h1 class="title">Plataforma</h1></div>
+                    <div class="item item-divider missing">Plataforma</div>
+                    <ion-radio ng-repeat="p in group.platforms" ng-model="invite.platform" ng-value="{{p}}" style="text-transform: capitalize">{{p.name}} {{p.version}}</ion-radio>
+
+
+                    <div class="bar bar-stable" ng-class="{'bar-assertive' : missingActivity}"><h1 class="title">Atividade</h1></div>
+                    <div class="item item-divider missing">Atividade</div>
+
+                    <ion-radio ng-repeat="activity in group.activities" name="activities"
+                               ng-model="invite.activity" ng-value="{{activity}}" ng-change="activitySelected()">{{activity.name}}</ion-radio>
+
+                    <label class="item item-input item-stacked-label" ng-show="!group.activities || group.activities.lenght == 0">
+                        <span class="input-label">Atividade</span>
+                        <input type="text" ng-model="invite.activity" placeholder="Raid, Osiris, Multiplayer, Campanha" ng-required="true" />
+                    </label>
+
+                    <div class="bar bar-stable" ng-class="{'bar-assertive' : missingPlayers}"><h1 class="title">Quantidade de jogadores</h1></div>
+                    <div class="item item-divider">Quantidade de jogadores</div>
+
+                    <label class="item item-input item-stacked-label">
+                        <input type="tel" ng-model="invite.players" value="{{invite.players}}">
+                    </label>
+
+                    <div class="bar bar-stable" ng-class="{'bar-assertive' : missingLevel}"><h1 class="title">Level</h1></div>
+                    <div class="item item-divider">Level</div>
+
+                    <ion-radio ng-repeat="level in group.levels" name="levels"
+                               ng-model="invite.level" ng-value="{{level}}" ng-change="levelSelected()">{{level.name}}</ion-radio>
+
+                    <label class="item item-input item-stacked-label" ng-show="!group.levels || group.levels.length == 0">
+                        <span class="input-label">Level</span>
+                        <input type="text" ng-model="invite.level" placeholder="Normal, Hard"/>
+                    </label>
+
+                    <div class="bar bar-stable" ng-class="{'bar-assertive' : missingDatetime}"><h1 class="title">Data/Hora</h1></div>
+                    <div class="item item-divider">Data/Hora</div>
+
+                    <div class="row invite-date">
+                        <div class="col-50 text-center">
+                            <label class="item item-input item-stacked-label text-center" style="border-style:none;padding:0px;">
+                                <span class="input-label">Data</span>
+                                <input type="date" ng-model="invite.date" placeholder="dd/MM/yyyy"
+                                       size="12" class="text-center" style="border:solid thin #ddd;"/>
+                            </label>
+                        </div>
+                        <div class="col-50 text-center">
+                            <label class="item item-input item-stacked-label text-center" style="border-style:none;padding:0px;">
+                                <span class="input-label">Hora</span>
+                                <input type="text" readonly="readonly" size="5" ng-model="invite.time" placeholder="hh:mm" size="5" class="text-center stable" style="border:solid thin #ddd;"/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row invite-date">
+                        <div class="col text-center">
+                            <div class="item range">
+                                <i class="icon ion-ios-sunny-outline"></i>
+                                <input type="range" name="volume" ng-change="timeChange()" ng-model="invite.rangeTime" min="0" max="1439" step="10"/>
+                                <i class="icon ion-ios-moon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="button button-block button-positive" ng-click="sendInvite()" >
+                        Convidar
+                    </button>
+                    <button class="button button-block button-positive" ng-click="backOneSlide()">
+                        Voltar
+                    </button>
+
+                </div>
+
+            </ion-slide>
+        </ion-slide-box>
+    </ion-content>
+</ion-view>

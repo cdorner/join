@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+process.env.FIREBASE = "https://jointhegame1.firebaseio.com";
+
+var app = require('../app');
+var debug = require('debug')('join-server:server');

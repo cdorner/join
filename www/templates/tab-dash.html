@@ -1,0 +1,125 @@
+<ion-view view-title="Join">
+
+    <ion-nav-buttons side="left">
+        <i ng-click="showConfigurations();" class="icon ion-ios-gear-outline" style="font-size:34px;"></i>
+    </ion-nav-buttons>
+
+    <ion-nav-buttons side="right">
+        <a class="icon ion-ios-game-controller-b-outline" ui-sref="group-invite" style="font-size:32px;padding-right: 5px;"></a>
+        <a class="icon ion-log-out" ng-click="logout()" style="font-size:32px;"></a>
+    </ion-nav-buttons>
+
+
+    <ion-content class="padding">
+        <ion-refresher
+                pulling-text="Puxe para atualizar"
+                on-refresh="refresh()">
+        </ion-refresher>
+
+        <div class="card" ng-show="messages.values.length > 0">
+            <div class="item item-divider">
+                Mensagens
+            </div>
+            <div class="item item-text-wrap" ng-repeat="m in messages.values">
+                <span ng-click="messageAction(m)">{{m.message}}<span>
+            </div>
+        </div>
+
+        <ion-list>
+            <div class="item item-divider" ng-show="activityGroups.length > 0">
+                Grupos ativos
+            </div>
+
+            <ion-item class="item-thumbnail-left item-remove-animate item-avatar item-icon-right" ng-repeat="group in activityGroups" type="item-text-wrap"
+                      ui-sref="group_chat({'type':'activity', 'groupId' : group.$id})">
+                <img ng-src="{{group.photo}}" >
+                <h2>{{group.activity}} - {{group.level}}</h2>
+                <p>{{group.totalParticipants}}/{{group.players}} Participantes</p>
+                <p>{{group.timestamp | date : 'dd/MM/yy hh:mm'}}</p>
+                <p>com {{group.with}}</p>
+                <i ng-repeat="p in group.platforms" class="icon ion-{{p.name}}-{{p.version}}"></i>
+
+                <ion-option-button class="button-assertive" ng-click="out(group)">
+                    Sair
+                </ion-option-button>
+                <ion-option-button class="button-calm" ng-click="confirm(group)">
+                    Confirmar
+                </ion-option-button>
+            </ion-item>
+
+            <div class="item item-divider" ng-show="activityInvites.length > 0">
+                Convites pendentes
+            </div>
+
+            <ion-item class="item-thumbnail-left item-remove-animate item-avatar item-icon-right" ng-repeat="group in activityInvites" type="item-text-wrap">
+                <img ng-src="{{group.photo}}" >
+                <h2>{{group.name}} {{group.totalParticipants}}/{{group.players}} Participantes</h2>
+                <p ng-hide="group.timestamp">{{group.text}}</p>
+                <p ng-show="group.timestamp">{{group.activity}} {{group.level}}</p>
+                <p ng-show="group.timestamp">{{group.timestamp | date : 'medium'}}</p>
+                <p>com {{group.with}}</p>
+                <i ng-repeat="p in group.platforms" class="icon ion-{{p.name}}-{{p.version}}"></i>
+
+                <ion-option-button class="button-calm" ng-click="join(group)">
+                    Join
+                </ion-option-button>
+                <ion-option-button class="button-assertive" ng-click="ignore(group)">
+                    Ignorar
+                </ion-option-button>
+            </ion-item>
+
+        </ion-list>
+
+
+        <div class="" ng-show="showPublicGroupSuggestions || showPublicActivitySuggestions">
+
+            <div ng-show="showPublicGroupSuggestions" class="card">
+                <div class="item item-text-wrap" style="text-align:justify;line-height:150%;margin:15px;">
+                    "Você não está participando de nenhum grupo no momento, você pode criar um grupo e convidar seus amigos, ou entrar em grupo público e fazer novas amizades.
+                    <a ui-sref="groups">Clique aqui</a> que iremos guiar você, ou de uma olhada nas nossas sugestões abaixo"
+                </div>
+
+                <div class="item item-text-wrap" style="text-align:justify;line-height:150%;margin:15px;">
+                    "Em muitos lugares é possível fazer um swip <img height="30" width="30" src="img/swipe.png"/> para habilitar algumas opções"
+                </div>
+            </div>
+
+            <div ng-show="showPublicActivitySuggestions" class="card ng-hide">
+                <div class="item item-text-wrap" style="text-align:justify;line-height:200%;margin:15px;">
+                    "Você nao deu join em nenhuma atividade, veja abaixo algumas opções de atividades para os grupos que você esta seguindo ou clique no icone
+                    <i class="icon ion-ios-game-controller-b-outline" style="font-size:32px;"></i> para criar uma atividade."
+                </div>
+            </div>
+
+            <div ng-show="showPublicGroupSuggestions || showPublicActivitySuggestions" class="list card">
+                <ion-list>
+                    <div class="item item-divider">
+                        <h2 ng-show="showPublicGroupSuggestions">Grupos Públicos</h2>
+                        <h2 ng-show="showPublicActivitySuggestions">Atividades</h2>
+                    </div>
+                    <div ng-show="suggestions.length == 0" class="item item-text-wrap" style="text-align:justify;line-height:200%;margin:15px;">
+                        Opss... Não encontramos nenhuma atividade no momento.
+                    </div>
+
+                    <ion-item class="item-thumbnail-left item-remove-animate item-avatar item-icon-right" ng-repeat="group in suggestions" type="item-text-wrap">
+                        <img ng-src="{{group.photo}}" >
+                        <h2>{{group.name}}</h2>
+                        <p>{{group.text}}</p>
+                        <p ng-show="group.timestamp">{{group.activity}} {{group.level}}</p>
+                        <p>{{group.timestamp | date : 'medium'}}</p>
+                        <p>{{group.totalParticipants}} Pessoas <span ng-show="showPublicGroupSuggestions">| {{group.totalSubordinates}} Grupos ativos</span></p>
+                        <p>Plataformas:
+                            <i ng-repeat="p in group.platforms" class="ion-{{p.name}}-{{p.version}}" style="font-size: 25px;margin-left: 10px;"></i>
+                        </p>
+
+                        <ion-option-button class="button-calm" ng-click="join(group)">
+                            Join
+                        </ion-option-button>
+                    </ion-item>
+
+                </ion-list>
+
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

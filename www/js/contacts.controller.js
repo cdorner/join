@@ -1,0 +1,88 @@
+angular.module('join.contacts.controllers', [])
+
+    .controller('ContactsController', function($scope, $ionicLoading, $ionicPopover, $ionicModal, $path, $firebase, $firebaseArray, $logger) {
+        $logger.config("ContactsController");
+
+        $scope.search = {};
+        $scope.user = null;
+
+        $scope.$on('$ionicView.beforeEnter', function(e) {
+            $scope.refresh();
+
+            $ionicModal.fromTemplateUrl('search.html', { scope: $scope, animation: 'slide-in-up' }).then(function(modal) {
+                $scope.modal = modal;
+            });
+        });
+
+        $scope.refresh = function(){
+            var user = JSON.parse(window.localStorage.getItem("user"));
+
+            $scope.followings = $firebaseArray($firebase("users_followers", user.$id, "following"));
+            $scope.followers = $firebaseArray($firebase("users_followers", user.$id, "followers"));
+
+            $scope.followings.$loaded().then(function(){
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+
+        };
+
+        $scope.openOptions = function(user, $event){
+            $scope.user = user;
+            $ionicPopover.fromTemplateUrl('options.html', { scope: $scope }).then(function(popover) {
+                $scope.popover = popover;
+                $scope.popover.show($event);
+            });
+
+        };
+
+        $scope.follow = function(){
+            var participant = $scope.user;
+            var user = JSON.parse(window.localStorage.getItem("user"));
+            var commands = {};
+
+            commands[$path("users_followers", user.$id, "following", participant.id)] = { id : participant.id, nickname : participant.nickname, photo : participant.photo, timestamp : Firebase.ServerValue.TIMESTAMP };
+            commands[$path("users_followers", participant.id, "followers", user.$id)] = { id : user.$id, nickname : user.nickname, photo : user.photo, timestamp : Firebase.ServerValue.TIMESTAMP };
+
+            $firebase().update(commands, function(error){
+                $ionicLoading.show({ template: "Feito.", noBackdrop: true, duration: 1500 });
+                $scope.popover.hide();
+                $scope.popover.remove();
+            });
+        };
+
+        $scope.unfollow = function(){
+            var participant = $scope.user;
+            var user = JSON.parse(window.localStorage.getItem("user"));
+            var commands = {};
+
+            commands[$path("users_followers", user.$id, "following", participant.id)] = null;
+
+            $firebase().update(commands, function(error){
+                $ionicLoading.show({ template: "Feito.", noBackdrop: true, duration: 1500 });
+                $scope.popover.hide();
+                $scope.popover.remove();
+            });
+        };
+
+        $scope.showSearch = function(){
+            $scope.modal.show();
+            $scope.search.active = true;
+        };
+
+        $scope.isMyContact = function(follower){
+            return $scope.followings.some(function(following){
+                return following.id == follower.id;
+            });
+        };
+
+        $scope.searchContacts = function(){
+            $scope.search.value = $firebaseArray($firebase("users").orderByChild("searchNickname").startAt($scope.search.text.toLowerCase()));
+        };
+
+        $scope.cancelSearch = function(){
+            $scope.search = {};
+            $scope.modal.hide();
+        };
+
+    })
+;

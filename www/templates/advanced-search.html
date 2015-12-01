@@ -1,0 +1,43 @@
+<ion-view view-title="Buscar">
+    <ion-nav-buttons side="left">
+        <button ng-click="$ionicGoBack()" class="button back-button buttons  button-clear header-item">
+            <i class="icon {{backButtonClass}}"></i>{{backTitle}}
+        </button>
+    </ion-nav-buttons>
+
+
+    <ion-nav-buttons side="right">
+        <button ng-click="new()" class="button button-icon icon ion-plus-round" style="color: #000;"></button>
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-refresher
+                pulling-text="Puxe para atualizar"
+                on-refresh="refresh()">
+        </ion-refresher>
+
+        <div class="list">
+            <div class="item item-divider">
+                Grupos públicos
+            </div>
+            <div class="item">
+                <label class="item item-input">
+                    <i class="icon ion-search" style="font-size: 20px;padding-right: 15px;"></i>
+                    <input type="text" placeholder="Pesquisar" ng-model="searchText">
+                    <i ng-show="searchText" class="icon ion-ios-close-empty pull-right" style="font-size: 22px;"></i>
+                </label>
+            </div>
+            <a class="item item-thumbnail-left item-avatar" ng-repeat="g in groups | filter:searchText" href="#" ng-click="enter(g)">
+                <img ng-src="{{g.photo}}">
+                <h2>{{g.name}} {{g.language}}</h2>
+                <p>
+                    <p>{{g.text}}</p>
+                    <i ng-repeat="p in g.platforms" class="icon ion-{{p.name}}-{{p.version}} platform-icon" style="float:right;white-space: normal !important;"></i>
+                </p>
+
+                <p>{{g.totalParticipants}} Participantes</p>
+                <p>{{g.totalSubordinates}} Grupos ativos</p>
+            </a>
+
+        </div>
+    </ion-content>
+</ion-view>

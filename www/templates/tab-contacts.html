@@ -1,0 +1,80 @@
+<ion-view view-title="Contatos">
+
+    <ion-nav-buttons side="right">
+        <i class="icon ion-search placeholder-icon" style="font-size: 25px;margin-top: 5px;" ng-hide="search.active" ng-click="showSearch()"></i>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <ion-refresher
+                pulling-text="Puxe para atualizar"
+                on-refresh="refresh()">
+        </ion-refresher>
+
+        <div class="contacts list">
+            <div>
+                <div class="item item-divider">
+                    Seguindo {{searchText}}
+                </div>
+
+                <div class="item item-avatar" href="#" ng-repeat="f in followings" ng-click="openOptions(f, $event)">
+                    <img ng-src="{{f.photo}}?s=40">
+                    <h2>{{f.nickname}}</h2>
+                </div>
+                <div class="item" ng-show="followings.length == 0">
+                    Nenhum seguidor encontrado
+                </div>
+
+                <div class="item item-divider">
+                    Seguidores
+                </div>
+
+                <div class="item" ng-show="followers.length == 0">
+                    Nenhum seguidor encontrado
+                </div>
+
+                <div class="item item-avatar" href="#" ng-repeat="f in followers" ng-click="openOptions(f, $event)" ng-hide="isMyContact(f)">
+                    <img ng-src="{{f.photo}}">
+                    <h2>{{f.nickname}}</h2>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+
+    <script id="search.html" type="text/ng-template">
+        <ion-modal-view>
+            <ion-header-bar>
+                <div class="bar bar-header item-input-inset">
+                    <label class="item-input-wrapper" ng-show="search.active">
+                        <i class="icon ion-search placeholder-icon" style="font-size: 20px;"></i>
+                        <input type="text" placeholder="Pesquisar" ng-model="search.text" ng-change="searchContacts(search.text)">
+                    </label>
+                    <button ng-click="cancelSearch()" class="button button-icon icon ion-ios-close-empty" style="font-size: 26px;"></button>
+                </div>
+            </ion-header-bar>
+            <ion-content>
+                <div class="contacts list">
+                    <div class="item" ng-show="search.value.length == 0">
+                        Ninguém encotrado com esse filtro
+                    </div>
+
+                    <div class="item item-avatar" href="#" ng-repeat="f in search.value" ng-click="openOptions(f, $event)">
+                        <img ng-src="{{f.photo}}">
+                        <h2>{{f.nickname}}</h2>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
+    <script id="options.html" type="text/ng-template">
+        <ion-popover-view style="height: 125px">
+            <ion-content>
+                <div class="list">
+                    <a class="item" href="#" ng-click="follow()">Seguir</a>
+                    <a class="item" href="#" ng-click="unfollow()">Deixar de Seguir</a>
+                </div>
+            </ion-content>
+        </ion-popover-view>
+    </script>
+
+</ion-view>

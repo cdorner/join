@@ -1,0 +1,66 @@
+<ion-view>
+    <ion-nav-title>
+        <div class="title title-left header-item">
+            <img ng-src="{{group.photo}}" class="icon group-photo" style="width: 32px; height: 32px;margin-top: 5px;" />
+            {{group.name}}
+        </div>
+    </ion-nav-title>
+
+    <ion-nav-buttons side="right">
+        <!-- menu-toggle="right" doesn't work-->
+        <button  ng-click="sideMenuToggle()" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+
+    <ion-side-menus>
+
+        <ion-side-menu-content>
+            <ion-content class="" style="background-color:#FFF8DC;">
+                <button class="button button-block button-light" ng-click="loadMoreMessages()" style="font-size: 10px;margin-top: 0;min-height: 35px;height: 35px;">
+                    CARREGAR MENSAGENS ANTERIORES
+                </button>
+
+
+                <ion-spinner ng-hide="group" class="pre-page-loader-spinner"></ion-spinner>
+
+                <div id="messagesBox" ng-show="group" class="padding" style="margin-bottom:10px;">
+
+                </div>
+
+            </ion-content>
+
+        </ion-side-menu-content>
+
+        <!-- Right menu -->
+        <ion-side-menu side="right">
+            <header class="bar bar-header bar-stable">
+                <h1 class="title">Options</h1>
+            </header>
+            <ion-content class="has-header">
+                <ul class="list">
+                    <a class="item" ui-sref="group_options({'type': type, 'groupId' : group.$id})" ng-click="sideMenuToggle()">Dados do grupo</a>
+                    <a class="item" ui-sref="group_participantes({'type': type, 'groupId' : group.$id})" ng-click="sideMenuToggle()">Participantes</a>
+                    <a class="item" ng-hide="group.timestamp" ui-sref="group_subordinates({'type': type, 'groupId' : group.$id})" ng-click="sideMenuToggle()">Grupos ativos</a>
+                    <a class="item" ng-show="isEditable" ui-sref="edit_activity({'type': type, 'groupId' : group.$id})" ng-click="sideMenuToggle()">Editar</a>
+                    <ion-toggle ng-change="toogleDisableScroll()" ng-model="disableScroll" toggle-class="toggle-calm">
+                        Desabilitar rolagem
+                    </ion-toggle>
+                </ul>
+            </ion-content>
+        </ion-side-menu>
+
+    </ion-side-menus>
+
+    <ion-footer-bar keyboard-attach class="" style="margin-top:20px;background-color: transparent;">
+        <label class="item-input-wrapper" style="margin: 0px;padding: 0px">
+            <textarea placeholder="Digite aqui..." ng-model="conversation.text" style="width: 100%"></textarea>
+        </label>
+        <button class="button button-icon" ng-click="sendMessage()">
+            <i class="icon ion-android-send" style="font-size:25px;" ></i>
+        </button>
+        <!-- on-return="sendMessage(); closeKeyboard()" on-blur="inputDown()" -->
+    </ion-footer-bar>
+
+
+
+
+</ion-view>

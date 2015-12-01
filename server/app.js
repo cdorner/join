@@ -1,0 +1,9 @@
+require('./routes/update.group.participantes');
+require('./routes/update.group.subordinates');
+require('./routes/notify.participant.enter.group');
+require("./routes/notify.user.activity");
+require("./routes/chat.messages.listener");
+require("./routes/update.groups.participants.cache");
+require("./routes/users.searching.modification");
+require("./routes/update.caches");
+require("./routes/notify.user.unread.messages");

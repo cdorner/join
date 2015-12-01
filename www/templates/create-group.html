@@ -1,0 +1,97 @@
+<ion-view view-title="Criar">
+
+	<ion-nav-bar no-tap-scroll="true" class="bar-energized">
+		<ion-nav-back-button ng-click="back()">
+		</ion-nav-back-button>
+	</ion-nav-bar>
+
+	<ion-content>
+		<ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" auto-play="false">
+			<ion-slide>
+				<div class="list">
+					<div class="item item-divider">
+						Escolha um jogo para criar o grupo
+					</div>
+					<div class="item">
+						<label class="item item-input">
+							<i class="icon ion-search" style="font-size: 20px;padding-right: 15px;"></i>
+							<input type="text" placeholder="Pesquisar" ng-model="searchGroupText">
+							<i ng-show="searchGroupText" class="icon ion-ios-close-empty pull-right" style="font-size: 22px;"></i>
+						</label>
+					</div>
+					<div class="item item-thumbnail-left item-avatar" ng-repeat="s in subjects | filter:searchGroupText" ng-click="select(s)">
+						<img ng-src="{{s.photo}}">
+						<h2>{{s.name}}</h2>
+						<p style="text-transform:capitalize;">{{s.platform.name}} {{s.platform.version}}
+							<i ng-repeat="p in s.platforms" class="icon ion-{{p.name}}-{{p.version}}" style="font-size:25px;float:right;white-space: normal !important;padding-right: 5px;"></i>
+						</p>
+					</div>
+				</div>
+			</ion-slide>
+			<ion-slide>
+				<div class="row">
+					<div class="col col-75">
+						<div class="item item-thumbnail-left item-avatar item-text-wrap" style="border: 0px;">
+							<img ng-src="{{subject.photo}}">
+							<h2>Grupo privado de {{subject.name}}.</h2>
+						</div>
+					</div>
+					<div class="col">
+						<button class="button button-block button-positive" ng-click="create()">
+							Criar
+						</button>
+					</div>
+				</div>
+				<div class="row assertive">
+					<div class="col">{{message}}</div>
+				</div>
+
+				<div class="row">
+
+					<div class="pull-right text-center" style="margin-right: 10px;text-transform: capitalize" ng-repeat="p in platforms">
+						<label class="checkbox">
+							<input type="checkbox" ng-model="p.selected">
+						</label>
+						{{p.name}} {{p.version}}
+					</div>
+				</div>
+
+				<div class="list">
+
+					<label class="item item-input">
+						<input type="text" placeholder="Nome" ng-model="group.name">
+					</label>
+					<label class="item item-input">
+						<input type="text" placeholder="Descrição" ng-model="group.text">
+					</label>
+
+					<ul class="list" style="margin-top: 5px;">
+						<div class="item" style="border-top: 0px;">
+							<li class="item positive">
+								Convide amigos para seu grupo
+								<h3 class="positive">{{(followers | filter:{'selected':true}).length}} Selecionados</h3>
+							</li>
+							<label class="item item-input">
+								<i class="icon ion-search" style="font-size: 20px;padding-right: 15px;"></i>
+								<input type="text" placeholder="Pesquisar" ng-model="searchText">
+								<i ng-show="searchText" class="icon ion-ios-close-empty pull-right" style="font-size: 22px;"></i>
+							</label>
+						</div>
+
+
+						<li class="item item-checkbox item-avatar-right" ng-repeat="f in followers | filter:{'nickname': searchText}">
+							<img ng-src="{{f.photo}}">
+							<label class="checkbox">
+								<input type="checkbox" ng-model="f.selected">
+							</label>
+							{{f.nickname}}
+
+
+						</li>
+					</ul>
+				</div>
+
+			</ion-slide>
+		</ion-slide-box>
+	</ion-content>
+</ion-view>

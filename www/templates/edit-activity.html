@@ -1,0 +1,82 @@
+<ion-view view-title="Editar">
+	<ion-nav-buttons>
+	</ion-nav-buttons>
+	<ion-content class="padding" style="background-color:#FFF8DC;">
+		<ion-spinner ng-hide="group" class="pre-page-loader-spinner"></ion-spinner>
+		<div ng-show="group" class="list ng-hide">
+			<div class="item item-avatar">
+				<img ng-src="{{group.photo}}" /> <i ng-repeat="p in activity.platforms" class="icon ion-{{p.name}}" style="font-size:42px;float:right"></i>
+				<h2>{{group.name}} - {{group.language}} </h2>
+				<p>{{group.totalParticipantes || 0}} Pessoas no grupo </p>
+				<p>{{group.text}}</p>
+			</div>
+
+			<div class="bar bar-stable" ng-class="{'bar-assertive' : missingPlatform}"><h1 class="title">Plataforma</h1></div>
+			<div class="item item-divider missing">Plataforma</div>
+			<ion-radio ng-repeat="p in group.platforms" ng-model="activity.platform" ng-value="{{p}}" style="text-transform: capitalize">{{p.name}} {{p.version}}</ion-radio>
+
+
+			<div class="bar bar-stable" ng-class="{'bar-assertive' : missingActivity}"><h1 class="title">Atividade</h1></div>
+			<div class="item item-divider missing">Atividade</div>
+
+			<ion-radio ng-repeat="act in group.activities" name="activities"
+					   ng-model="activity.activity" ng-value="{{act}}">{{act.name}}</ion-radio>
+
+			<label class="item item-input item-stacked-label" ng-show="!group.activities || group.activities.lenght == 0">
+				<span class="input-label">Atividade</span>
+				<input type="text" ng-model="activity.activity" placeholder="Raid, Osiris, Multiplayer, Campanha" ng-required="true" />
+			</label>
+
+			<div class="bar bar-stable" ng-class="{'bar-assertive' : missingPlayers}"><h1 class="title">Quantidade de jogadores</h1></div>
+			<div class="item item-divider">Quantidade de jogadores</div>
+
+			<div class="item item-input item-content">
+				<input type="tel" ng-model="activity.players" value="{{activity.players}}">
+			</div>
+
+			<div class="bar bar-stable" ng-class="{'bar-assertive' : missingLevel}"><h1 class="title">Level</h1></div>
+			<div class="item item-divider">Level</div>
+
+			<ion-radio ng-repeat="level in group.levels" name="levels"
+					   ng-model="activity.level" ng-value="{{level}}">{{level.name}}</ion-radio>
+
+			<label class="item item-input item-stacked-label" ng-show="!group.levels || group.levels.length == 0">
+				<span class="input-label">Level</span>
+				<input type="text" ng-model="activity.level" placeholder="Normal, Hard"/>
+			</label>
+
+			<div class="bar bar-stable" ng-class="{'bar-assertive' : missingDatetime}"><h1 class="title">Data/Hora</h1></div>
+			<div class="item item-divider">Data/Hora</div>
+
+			<div class="row invite-date">
+				<div class="col-50 text-center">
+					<label class="item item-input item-stacked-label text-center" style="border-style:none;padding:0px;">
+						<span class="input-label">Data</span>
+						<input type="date" ng-model="activity.timestamp" placeholder="dd/MM/yyyy"  size="12" class="text-center" style="border:solid thin #ddd;"/>
+					</label>
+				</div>
+				<div class="col-50 text-center">
+					<label class="item item-input item-stacked-label text-center" style="border-style:none;padding:0px;">
+						<span class="input-label">Hora</span>
+						<input type="text" readonly="readonly" size="5" ng-model="activity.displayTime" placeholder="hh:mm" size="5" class="text-center stable" style="border:solid thin #ddd;"/>
+					</label>
+				</div>
+			</div>
+			<div class="row invite-date">
+				<div class="col text-center">
+					<div class="item range">
+						<i class="icon ion-ios-sunny-outline"></i>
+						<input type="range" name="volume" ng-change="timeChange()" ng-model="activity.time" min="0" max="1439" step="10"/>
+						<i class="icon ion-ios-moon"></i>
+					</div>
+				</div>
+			</div>
+			<button class="button button-block button-positive" ng-click="save()" >
+				Salvar alterações
+			</button>
+
+		</div>
+
+
+	</ion-content>
+</ion-view>
